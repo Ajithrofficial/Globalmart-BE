@@ -1,23 +1,30 @@
- const express = require('express');
+const express = require('express');
 const router = new express.Router();
 
 const productController = require('../Controllers/productController');
-const jwtMiddleware = require('../Middleware/jwtMiddleware')
+const jwtMiddleWare = require('../Middleware/jwtMiddleware');
+const cartController= require('../Controllers/cartController')
 
- //defining paths
+
+//defing paths
 router.get('/all-products', productController.getAllProductsController);
 
-router.get('/get-product/:id', productController.getProductsDetailsByIdController);
+router.get('/get-product/:id', productController.getProductDetailsByIdController);
 
-router.post('/add-wishlist', jwtMiddleware, productController.addToWishlistController);
+router.post('/add-wishlist', jwtMiddleWare, productController.addToWishlistController);
 
-router.get('/allwishlistitems', jwtMiddleware, productController.getAllWishlistItemsController);
+router.get('/allwishlistitems', jwtMiddleWare, productController.getAllWishlistitemsController);
+router.delete('/wishlist/removeItem/:id', jwtMiddleWare, productController.deleteItemWishlistController);
+router.post('/add-cart',jwtMiddleWare, cartController.addTocartControllerApi)
+router.get('/allCartitems',jwtMiddleWare,cartController.gettAllCartItemsControllerApi)
 
-router.delete('/wishlist/removeItem/:id', jwtMiddleware,  productController.deleteItemWishlistController);
+router.get('/cart/increment/:id',jwtMiddleWare,cartController.incrementItem)
 
-router.post('/add-cart', jwtMiddleware, )
+router.get('/cart/decrement/:id',jwtMiddleWare, cartController.decrementitem)
 
+router.delete('/empty-cart', jwtMiddleWare, cartController.emptycart)
 
- module.exports = router;
+router.delete('/cart/deleteone/:id',jwtMiddleWare, cartController.removeItem)
 
- 
+module.exports = router;
+

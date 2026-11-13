@@ -1,10 +1,8 @@
 const products = require('../Models/productModel');
 const wishlists = require('../Models/wishlistModel')
 
-// get all products
+//get all products
 exports.getAllProductsController = async (req, res) => {
-    console.log("Inside getAllProductsController ");
-
     try {
         const allProducts = await products.find();
         res.status(200).json(allProducts)
@@ -13,62 +11,64 @@ exports.getAllProductsController = async (req, res) => {
         res.status(401).json(err)
     }
 }
+
 // get product details by id
-exports.getProductsDetailsByIdController = async (req, res)=>{
-    const {id} = req.params;
-    console.log("Inside getProductsDetailsByIdController", id); 
-    
-    try{
-        const product = await products.findOne({id});
+exports.getProductDetailsByIdController = async (req, res) => {
+    const { id } = req.params;
+    console.log("Inside getProductDetailsByIdController", id)
+    try {
+        const product = await products.findOne({ id });
         res.status(200).json(product)
     }
-    catch(err){
+    catch (err) {
         res.status(401).json(err)
     }
 }
 
-exports.addToWishlistController = async(req, res)=>{
-    console.log("Inside addToWishlistController");   
-    const {id, title, price, description, category, image, rating} = req.body;
+exports.addToWishlistController = async (req, res) => {
+    console.log("inside addToWishlistController")
+    const { id, title, price, description, category, image, rating } = req.body;
     const userId = req.payload;
-    console.log( id, title, price, description, category, image, rating, userId);
-    try{
-        const existingProduct = await wishlists.findOne({id, userId});
-        if(existingProduct){
+    console.log(id, title, price, description, category, image, rating, userId);
+    try {
+        const existingProduct = await wishlists.findOne({ id, userId });
+        if (existingProduct) {
             res.status(406).json('Product already in your wishlist')
         }
-        else{
+        else {
             const newProduct = new wishlists({
-                id, title, price, description, category, image, rating, userId  
+                id, title, price, description, category, image, rating, userId
             });
             await newProduct.save();
             res.status(200).json(newProduct)
         }
+
     }
-    catch (error){
-        res.status(401).json(error)
+    catch (error) {
+        res.status(402).json(error)
     }
 }
 
-exports.getAllWishlistItemsController = async(req, res)=>{
-    console.log("Inside getAllWishlistItemsController");
+exports.getAllWishlistitemsController = async (req, res) => {
+    console.log("inside getAllWishlistitemsController");
     const userId = req.payload;
-    try{
-        const allProducts = await wishlists.find({userId});
+    try {
+        const allProducts = await wishlists.find({ userId });
         res.status(200).json(allProducts)
     }
-    catch(error){
+    catch (error) {
         res.status(401).json(error)
     }
 }
-exports.deleteItemWishlistController = async (req, res)=>{
+exports.deleteItemWishlistController = async (req, res) => {
     console.log("Inside delete wishlist item");
-    const {id} = req.params;
-    try{
-        const removeItem = await wishlists.findByIdAndDelete({_id: id });
+    const { id } = req.params;
+    try {
+        const removeItem = await wishlists.findByIdAndDelete({ _id: id });
         res.status(200).json(removeItem)
     }
-    catch(error){
-        res.status(401).json("Something went wrong")
+    catch (error) {
+        res.status(401).json("some thing went wrong")
     }
+
 }
