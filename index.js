@@ -19,5 +19,5 @@ cartServer.listen(PORT,()=>{
     
 })
 cartServer.get('/',(req,res)=>{
-    res.send('<h3>cart sever suucesulyy </h3>')
+    res.send('<h3>Cart server succesfully </h3>')
 })
